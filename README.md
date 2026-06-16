@@ -1,4 +1,4 @@
-[index.html.html](https://github.com/user-attachments/files/29021783/index.html.html)
+[index.html.html](https://github.com/user-attachments/files/29021783/index.html)
 # bingo-jovenes-del-papa<!DOCTYPE html>
 <html lang="es">
 <head>
