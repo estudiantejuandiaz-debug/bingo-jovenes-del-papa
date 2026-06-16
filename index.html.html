@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Bingo Benéfico · Fundación Jóvenes del Papa</title>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+html,body{width:100%;height:100vh;background:#04040C;display:flex;flex-direction:column;justify-content:center;align-items:center;font-family:'Inter',sans-serif;}
+.frame{width:600px;height:640px;position:relative;overflow:hidden;background:#080610;border-radius:18px;display:flex;flex-direction:column;align-items:center;justify-content:center;flex-shrink:0;}
+canvas{position:absolute;inset:0;pointer-events:none}
+.c{position:absolute;width:22px;height:22px}
+.tl{top:18px;left:18px;border-top:1px solid rgba(198,40,40,.65);border-left:1px solid rgba(198,40,40,.65)}
+.tr{top:18px;right:18px;border-top:1px solid rgba(198,40,40,.65);border-right:1px solid rgba(198,40,40,.65)}
+.bl{bottom:18px;left:18px;border-bottom:1px solid rgba(198,40,40,.65);border-left:1px solid rgba(198,40,40,.65)}
+.br{bottom:18px;right:18px;border-bottom:1px solid rgba(198,40,40,.65);border-right:1px solid rgba(198,40,40,.65)}
+.inner{position:relative;z-index:10;display:flex;flex-direction:column;align-items:center;width:100%;padding:0 44px}
+.logo-ring{width:70px;height:70px;background:#C62828;border-radius:50%;display:flex;align-items:center;justify-content:center;margin-bottom:14px;border:2px solid rgba(198,40,40,.3)}
+.fundacion{font-size:8.5px;font-weight:600;letter-spacing:3.5px;text-transform:uppercase;color:rgba(255,255,255,.75);margin-bottom:5px;text-align:center}
+.titulo{font-size:24px;font-weight:700;color:#C62828;letter-spacing:5px;text-transform:uppercase;margin-bottom:20px;text-align:center}
+.hr{width:100%;height:1px;background:rgba(198,40,40,.65);margin-bottom:26px}
+.hr2{width:100%;height:1px;background:rgba(198,40,40,.4);margin-top:26px;margin-bottom:16px}
+.row{display:flex;align-items:flex-start;justify-content:center;gap:3px;width:100%}
+.unit{flex:1;display:flex;flex-direction:column;align-items:center}
+.num{font-family:'Orbitron',monospace;font-size:44px;font-weight:900;color:#fff;line-height:1;text-align:center;width:100%;letter-spacing:-1px;transition:color .18s}
+.num-d{font-size:38px}
+.lbl{font-size:8px;font-weight:600;letter-spacing:4px;text-transform:uppercase;color:#C62828;margin-top:10px}
+.colon{font-family:'Orbitron',monospace;font-size:30px;font-weight:700;color:rgba(198,40,40,.4);line-height:1;flex-shrink:0;padding-top:5px}
+.fecha{font-size:10px;font-weight:300;letter-spacing:5.5px;text-transform:uppercase;color:rgba(255,255,255,.28)}
+.hint{position:fixed;bottom:14px;font-size:11px;color:rgba(255,255,255,.18);letter-spacing:2px;pointer-events:none}
+</style>
+</head>
+<body>
+<div class="frame">
+  <canvas id="cv"></canvas>
+  <div class="c tl"></div><div class="c tr"></div>
+  <div class="c bl"></div><div class="c br"></div>
+  <div class="inner">
+    <div class="logo-ring">
+      <svg width="40" height="44" viewBox="0 0 40 44" fill="none">
+        <line x1="12" y1="38" x2="12" y2="11" stroke="white" stroke-width="5.5" stroke-linecap="round"/>
+        <path d="M12 11 Q12 9 21 9 Q33 9 33 18.5 Q33 28 21 28 L12 28" stroke="white" stroke-width="5.5" stroke-linecap="round" stroke-linejoin="round"/>
+        <line x1="12" y1="5" x2="12" y2="10" stroke="white" stroke-width="4" stroke-linecap="round"/>
+        <line x1="8.5" y1="7.5" x2="15.5" y2="7.5" stroke="white" stroke-width="4" stroke-linecap="round"/>
+      </svg>
+    </div>
+    <p class="fundacion">Fundación Jóvenes del Papa</p>
+    <p class="titulo">✦ BINGO ✦</p>
+    <div class="hr"></div>
+    <div class="row">
+      <div class="unit">
+        <span id="d" class="num num-d">110</span>
+        <span class="lbl">Días</span>
+      </div>
+      <span class="colon">:</span>
+      <div class="unit">
+        <span id="h" class="num">00</span>
+        <span class="lbl">Horas</span>
+      </div>
+      <span class="colon" style="padding-top:9px;">:</span>
+      <div class="unit">
+        <span id="m" class="num">00</span>
+        <span class="lbl">Min</span>
+      </div>
+      <span class="colon" style="padding-top:9px;">:</span>
+      <div class="unit">
+        <span id="s" class="num">00</span>
+        <span class="lbl">Seg</span>
+      </div>
+    </div>
+    <div class="hr2"></div>
+    <p class="fecha">04 · Octubre · 2026</p>
+  </div>
+</div>
+<p class="hint">funjovenesdelpapa.github.io · Bingo Benéfico 2026</p>
+<script>
+const cv=document.getElementById('cv'),cx=cv.getContext('2d');
+cv.width=600;cv.height=640;
+const P=Array.from({length:80},()=>({x:Math.random()*600,y:Math.random()*640,r:Math.random()*1.1+.2,col:['rgba(198,40,40,','rgba(230,160,40,','rgba(255,255,255,'][Math.floor(Math.random()*3)],b:Math.random()*.3+.05,ph:Math.random()*Math.PI*2,fr:Math.random()*.013+.003}));
+function draw(){cx.clearRect(0,0,600,640);const t=Date.now()*.001;P.forEach(p=>{const op=p.b*(.6+.4*Math.sin(t*p.fr*60+p.ph));cx.beginPath();cx.arc(p.x,p.y,p.r,0,Math.PI*2);cx.fillStyle=p.col+op.toFixed(3)+')';cx.fill();});requestAnimationFrame(draw);}
+draw();
+const T=new Date('2026-10-04T00:00:00');
+let pS=-1,pM=-1,pH=-1;
+function flash(id){const e=document.getElementById(id);e.style.color='#C62828';setTimeout(()=>e.style.color='#fff',200);}
+function tick(){const df=Math.max(0,T-new Date()),d=Math.floor(df/86400000),hh=Math.floor((df%86400000)/3600000),mm=Math.floor((df%3600000)/60000),sc=Math.floor((df%60000)/1000);document.getElementById('d').textContent=String(d).padStart(3,'0');document.getElementById('h').textContent=String(hh).padStart(2,'0');document.getElementById('m').textContent=String(mm).padStart(2,'0');document.getElementById('s').textContent=String(sc).padStart(2,'0');if(sc!==pS){flash('s');pS=sc;}if(mm!==pM){flash('m');pM=mm;}if(hh!==pH){flash('h');pH=hh;}}
+tick();setInterval(tick,1000);
+</script>
+</body>
+</html>
